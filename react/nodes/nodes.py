@@ -2,7 +2,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from langgraph.prebuilt.tool_executor import ToolExecutor
+from langgraph.prebuilt import ToolNode
+
 
 from react.chains.reasoning_chain import react_reasoning_runnable, tools
 from react.state import AgentState
@@ -13,10 +14,32 @@ def run_agent_reasoning_engine(state: AgentState):
     return {"agent_outcome": agent_outcome}
 
 
-tool_executor = ToolExecutor(tools)
+
+tool_node = ToolNode(
+    tools=tools
+)
+
 
 
 def execute_tools(state: AgentState):
     agent_action = state["agent_outcome"]
-    output = tool_executor.invoke(agent_action)
+    
+    # Estrai il nome del tool e l'input
+    tool_name = agent_action.tool
+    tool_input = agent_action.tool_input
+    
+    # Trova il tool corretto nella lista tools
+    selected_tool = None
+    for tool in tools:
+        if tool.name == tool_name:
+            selected_tool = tool
+            break
+    
+    if selected_tool:
+        # Esegui il tool selezionato con l'input fornito
+        output = selected_tool.invoke(tool_input)
+    else:
+        output = f"Error: Tool '{tool_name}' not found"
+    
     return {"intermediate_steps": [(agent_action, str(output))]}
+

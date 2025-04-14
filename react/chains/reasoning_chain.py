@@ -29,7 +29,7 @@ def triple(num: float) -> float:
     :param num: a number to triple
     :return: the number multiplied by 3 (tripled(
     """
-
+    num = float(num)
     return num * 3
 
 

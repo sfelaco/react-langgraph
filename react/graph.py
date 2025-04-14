@@ -30,9 +30,13 @@ flow.add_conditional_edges(
     should_continue,
 )
 flow.add_edge(ACT, AGENT_REASON)
-from langgraph.checkpoint.sqlite import SqliteSaver
+#from langgraph.checkpoint.sqlite import SqliteSaver
+#from langgraph.checkpoint import SQLiteCheckpoint
 
-memory = SqliteSaver.from_conn_string(":checkpoints.sqlite:")
+#memory = SQLiteCheckpoint.from_conn_string(":checkpoints.sqlite:")
 
-app = flow.compile(checkpointer=memory)
+#app = flow.compile(checkpointer=memory)
+
+app = flow.compile()
+
 # app.get_graph().draw_mermaid_png(output_file_path="../static/graph.png")
